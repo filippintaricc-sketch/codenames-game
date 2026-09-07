@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+    --bg-deep: #0e1526;
+    --bg-deep-2: #16213a;
+    --cream: #ede3c7;
+    --cream-dark: #d8c9a0;
+    --gold: #d9a441;
+    --gold-light: #f0c675;
+    --blue: #1f93d1;
+    --blue-dark: #14618c;
+    --red: #d1483a;
+    --red-dark: #8f2e24;
+    --ink: #1e2233;
+}
+
+*{ box-sizing: border-box; }
+
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 3vh 2vh;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background:
+        radial-gradient(circle at 50% -10%, #22304f 0%, var(--bg-deep) 55%),
+        var(--bg-deep);
+    color: var(--cream);
+    line-height: 1.6;
+    overflow-y: hidden;
+}
+
+h1{
+    text-align: center;
+    margin: 0 0 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 2.1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    text-shadow: 0 2px 12px rgba(217, 164, 65, 0.25);
+}
+
+h2{
+    text-align: center;
+    margin: 0 0 18px;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--cream-dark);
+}
+
+hr{
+    border: none;
+    height: 1px;
+    max-width: 480px;
+    margin: 0 auto 28px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.6;
+}
+
+.container{
+    display: grid;
+    height: 55vh;
+    overflow-y: auto;
+    gap: 18px;
+    max-width: 780px;
+    margin: 0 auto;
+    grid-template-columns: 1fr 1fr;
+}
+
+.kartica{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cream);
+    color: var(--ink);
+    width: auto;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kartica:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.4);
+}
+
+.teamName{
+    padding: 10px 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #fff;
+}
+
+.teamName::before{
+    content: "🕵 ";
+}
+
+.Plavi{
+    background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+}
+
+.Crveni{
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+}
+
+ul{
+    height: auto;
+    flex: 1;
+    margin: 0;
+    padding: 10px 14px;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 6px;
+}
+
+li{
+    background-color: var(--cream-dark);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+form{
+    padding: 10px 14px;
+    margin: 0;
+}
+
+.enter-btn{
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #2a1e04;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 0;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.enter-btn:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(217, 164, 65, 0.4);
+}
+
+/* Gumb za zapocinjanje igre (van .kartica, izravno dijete body-a) */
+body > .enter-btn{
+    display: block;
+    width: auto;
+    margin: 22px auto 0;
+    padding: 12px 34px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    animation: pulse-glow 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow{
+    0%, 100% { box-shadow: 0 0 0 0 rgba(217, 164, 65, 0.45); }
+    50% { box-shadow: 0 0 0 10px rgba(217, 164, 65, 0); }
+}
+
+@media (prefers-reduced-motion: reduce){
+    body > .enter-btn{ animation: none; }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "codenames",
+  "version": "1.0.0",
+  "description": "Web alikacija za igru codenames",
+  "license": "ISC",
+  "author": "Filip Pintaric",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "socket.io": "^4.8.3"
+  }
+}

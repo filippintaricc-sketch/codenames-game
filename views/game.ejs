@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codenames</title>
+    <link rel = "stylesheet" href = "/css/game.css">
+</head>
+<body data-turn-ends-at="<%= game.turnEndsAt || '' %>">
+    <div class = "blueScore"><%=teams.find(p=>p.id ===0).players%>, <%=teams.find(p=>p.id ===2).players%>: <%=game.blueScore%></div>
+    <div class = "redScore"><%=teams.find(p=>p.id ===1).players%>, <%=teams.find(p=>p.id ===3).players%>: <%=game.redScore%></div>
+    <div class = "pokusaji-wrapper">
+        <%game.guesses.forEach(el=>{%>
+            <ul class = "<%=el.turn%>"><%=el.clue%> (<%=el.guessesNum%>)</ul>
+            <div class = "pokusaji">
+                <%el.wordsGuessed.forEach(elem=>{%>
+                    <li class = "<%=elem.class%>"><%=elem.word%></li>
+                <%})%>
+            </div>
+        <%})%>
+        <%if(pobjednik){%>
+            <ul class = "<%=pobjednik%>"><%=pobjednik%> pobjeđuju!</ul>
+        <%}%>
+    </div>
+    <div class = "rijeci-wrapper">        
+        <%if(player.type ==="špijuni"){%>
+            <%game.words.forEach(el=>{%>
+                <div class = "kartica <%=el.class%>">
+                    <%=el.word%>
+                </div>
+            <%})%>
+        <%}else{%>
+            <%game.words.forEach(el=>{%>
+            <%if(!el.guessed){%>
+                <div class = "kartica nothing">
+                    <%=el.word%>
+                    <%if(game.turn===player.team && game.clueGiven===true){%>
+                    <form method = "POST" action = "/game/guess">
+                        <input type = "hidden" value = "<%=el.id%>" name = "index">
+                            <button type = "submit" class = "guess-btn">👆</button>                       
+                    </form>              
+                    <%}%>
+                </div>
+            <%}else{%>
+                <div class = "kartica <%=el.class%> guessed"><%=el.word%></div>
+            <%}%>
+        <%})%>
+        <%}%>
+    </div>
+    <div class = "actions-bar">
+        <%if(game.timer){%>
+        <div id="timer" class="timer"></div>
+        <%}%>
+        <%if(player.type ==="špijuni" && game.turn === player.team && game.clueGiven === false && !pobjednik){%>
+            <form method = "POST" action = "/game/clue" class = "clue-form">
+                <input type = "text" name = "clue">
+                <input type = "number" min = "1" max = "9" name = "numOfGuesses">
+                <button type = "submit">Posalji</button>
+            </form>
+        <%}%>
+    
+        <%if(player.type ==="operativci" && game.turn === player.team && game.clueGiven === true && !pobjednik){%>
+            <form action = "/game/endTurn">
+                <button type = "submit" class = "endTurn-btn">end</button>
+            </form>
+        <%}%>
+
+        <%if(host){%>
+        <form method = "POST" action = "/game/restart">
+            <button type = "submit" class = "restart-btn">Restart</button>
+        </form>
+        <%}%>
+        <% if (player.team !== game.turn && !pobjednik) { %>
+            <form id="forceEndForm" action="/game/endTurn" class="force-end-form hidden">
+                <button type="submit" class="endTurn-btn force-end-btn">⏱ Vrijeme isteklo - završi potez</button>
+            </form>
+        <%}%>
+        
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src = "/scripts/script.js"></script>
+    <script>
+        const rawValue = document.body.dataset.turnEndsAt;
+        const turnEndsAt = rawValue ? Number(rawValue) : null;
+        const timerEl = document.getElementById('timer');
+        const forceEndForm = document.getElementById('forceEndForm');
+        let intervalId;
+
+        function updateTimer(){
+            if(!turnEndsAt){
+                timerEl.textContent = '';
+                return;
+            }
+            const remaining = Math.max(0, Math.floor((turnEndsAt - Date.now()) / 1000));
+            const min = Math.floor(remaining / 60);
+            const sec = remaining % 60;
+            timerEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+
+            if(remaining <= 0){
+                clearInterval(intervalId);
+                if(forceEndForm) forceEndForm.classList.remove('hidden');
+            }
+        }
+
+        updateTimer();
+        intervalId = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>

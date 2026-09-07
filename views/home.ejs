@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codenames</title>
+    <link rel = "stylesheet" href = "/css/home.css">
+</head>
+<body>
+    <h1>Dobrodosli u codenames!</h1>
+    <h2>Odaberite tim i ulogu</h2>
+    <hr>
+    <%if (host){%>
+    <label for = "timer-form">Postavi tajmer</label>
+    <form method = "POST" action = "/home/setTimer" id = "timer-form" class = "timer-form">
+        <label for="quick">
+        <input id = "quick" type = "radio" name = "timer" value = "90">brzo
+        </label>
+        <label for="normal">
+        <input id = "normal" type = "radio" name = "timer" value = "150">normalno
+        </label>
+        <label for="relaxed">
+        <input id = "relaxed" type = "radio" name = "timer" value = "300">opušteno
+        </label>
+        <label for="none">
+        <input id = "none" type = "radio" name = "timer" value = "0">bez
+        </label>
+        <button type = "submit" class = "submit-btn">Set timer</button>
+    </form>
+    <%}%>
+    <div class = "container">
+        
+        <%teams.forEach(elem=>{%>
+        <div class = "kartica">
+                <div class ="teamName <%=elem.team%>"><%=elem.team%> tim <%=elem.type%></div>
+                <ul>
+                <% elem.players.forEach(el=>{%>
+                    <li><%=el%></li>
+                <%})%>
+                </ul>
+                <form method = "POST" action = "/home/teamEnter">
+                    <input type ="hidden" value = "<%=elem.id%>" name = "team">
+                    <button type ="submit" class ="enter-btn">Udi ovdje</button>
+                </form>
+        </div>
+        <%})%>
+    <%if (host){%>
+    <button  onclick =  "window.location.href = '/home/startGame'" class = "enter-btn">Zapocni igru!</button>
+    <%}%>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on("game-update", () => location.reload());
+    </script>
+</body>
+</html>
