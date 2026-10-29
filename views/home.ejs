@@ -11,21 +11,25 @@
     <h2>Odaberite tim i ulogu</h2>
     <hr>
     <%if (host){%>
-    <label for = "timer-form">Postavi tajmer</label>
-    <form method = "POST" action = "/home/setTimer" id = "timer-form" class = "timer-form">
-        <label for="quick">
-        <input id = "quick" type = "radio" name = "timer" value = "90">brzo
-        </label>
-        <label for="normal">
-        <input id = "normal" type = "radio" name = "timer" value = "150">normalno
-        </label>
-        <label for="relaxed">
-        <input id = "relaxed" type = "radio" name = "timer" value = "300">opušteno
-        </label>
-        <label for="none">
-        <input id = "none" type = "radio" name = "timer" value = "0">bez
-        </label>
-        <button type = "submit" class = "submit-btn">Set timer</button>
+    <form method = "POST" action = "/home/setTimer" class = "timer-form">
+        <span class = "timer-title">⏱ Tajmer</span>
+        <div class = "timer-options">
+            <%[
+                {value: 90, name: "brzo", time: "1:30"},
+                {value: 150, name: "normalno", time: "2:30"},
+                {value: 300, name: "opušteno", time: "5:00"},
+                {value: 0, name: "bez", time: ""}
+            ].forEach(opt=>{%>
+            <label>
+                <input type = "radio" name = "timer" value = "<%=opt.value%>" required <%=timer === opt.value ? "checked" : ""%>>
+                <span><%=opt.name%><%if(opt.time){%> <small><%=opt.time%></small><%}%></span>
+            </label>
+            <%})%>
+        </div>
+        <button type = "submit" class = "enter-btn timer-btn">Postavi</button>
+        <%if(timer === undefined){%>
+        <p class = "timer-hint">Odaberite tajmer prije početka igre</p>
+        <%}%>
     </form>
     <%}%>
     <div class = "container">
@@ -44,6 +48,7 @@
                 </form>
         </div>
         <%})%>
+    </div>
     <%if (host){%>
     <button  onclick =  "window.location.href = '/home/startGame'" class = "enter-btn">Zapocni igru!</button>
     <%}%>

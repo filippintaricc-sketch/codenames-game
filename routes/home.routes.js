@@ -15,8 +15,9 @@ router.get("/", (req, res) => {
 
   let host = playerData.host===req.session.player;
   let teams = playerData.teams;
+  let timer = game.timer;
 
-  res.render("home", { teams, host});
+  res.render("home", { teams, host, timer});
 });
 
 router.post("/teamEnter", (req, res) => {

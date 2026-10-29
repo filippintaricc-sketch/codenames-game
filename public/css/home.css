@@ -59,6 +59,110 @@ hr{
     opacity: 0.6;
 }
 
+/* Postavke tajmera (vidi ih samo host) */
+.timer-form{
+    max-width: 780px;
+    margin: 0 auto 22px;
+    padding: 10px 14px;
+    background-color: rgba(237, 227, 199, 0.06);
+    border: 1px solid rgba(217, 164, 65, 0.35);
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.timer-title{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gold-light);
+}
+
+.timer-options{
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.timer-options label{
+    position: relative;
+}
+
+/* radio gumb je nevidljiv, a span izgleda kao "chip" koji se klikne */
+.timer-options input{
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.timer-options span{
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid var(--cream-dark);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--cream);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.timer-options small{
+    margin-left: 2px;
+    opacity: 0.7;
+}
+
+.timer-options span:hover{
+    background-color: rgba(237, 227, 199, 0.12);
+}
+
+.timer-options input:checked + span{
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    border-color: var(--gold);
+    color: #2a1e04;
+    font-weight: 600;
+}
+
+.timer-options input:focus-visible + span{
+    outline: 2px solid var(--gold-light);
+    outline-offset: 2px;
+}
+
+/* .timer-form ispred povecava specificnost da pobijedi width: 100% iz .enter-btn */
+.timer-form .timer-btn{
+    width: auto;
+    padding: 7px 22px;
+}
+
+.timer-hint{
+    width: 100%;
+    margin: 0;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--cream-dark);
+}
+
+/* na mobitelu: naslov i gumb u prvom redu, opcije u svom redu ispod */
+@media screen and (max-width: 748px){
+    .timer-form{
+        justify-content: space-between;
+    }
+
+    .timer-options{
+        order: 1;
+        flex-basis: 100%;
+    }
+
+    .timer-hint{
+        order: 2;
+    }
+}
+
 .container{
     display: grid;
     height: 55vh;
