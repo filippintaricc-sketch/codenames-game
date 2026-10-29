@@ -44,11 +44,11 @@ router.post("/teamEnter", (req, res) => {
 });
 
 router.get("/startGame", (req, res) => {
-  /*if(!playerData.teams.find(p=>p.id===0).players.length || !playerData.teams.find(p=>p.id===1).players.length || !playerData.teams.find(p=>p.id===2).players.length || !playerData.teams.find(p=>p.id===3).players.length){
+  if(!playerData.teams.find(p=>p.id===0).players.length || !playerData.teams.find(p=>p.id===1).players.length || !playerData.teams.find(p=>p.id===2).players.length || !playerData.teams.find(p=>p.id===3).players.length){
     res.redirect("/home");
     return;
   }
-  */
+  
 
   if(game.timer === undefined){
     res.redirect("/home");
