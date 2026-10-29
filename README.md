@@ -34,6 +34,15 @@ Web verzija društvene igre Codenames, osobni projekt. Igra podržava real-time 
 
 Projekt ne zahtijeva `.env` datoteku niti dodatnu konfiguraciju za pokretanje.
 
+## Varijable okruženja
+
+Lokalno nisu potrebne, ali na serveru (npr. Render) se postavljaju:
+
+| Varijabla | Zadano | Opis |
+|---|---|---|
+| `PORT` | `8080` | Port na kojem server sluša. Render ga postavlja sam. |
+| `SESSION_SECRET` | `anything` | Tajni ključ za potpisivanje session kolačića. Na serveru postavi dugi nasumični niz. |
+
 ## Kako se igra
 
 Otvori aplikaciju u više prozora/uređaja da isprobaš multiplayer, pridruži se igri i igraj Codenames s prijateljima uživo.

@@ -12,7 +12,7 @@ app.use(express.urlencoded({
 
 app.use(
   session({
-    secret: 'anything',
+    secret: process.env.SESSION_SECRET || 'anything', // na Renderu se postavlja SESSION_SECRET
     resave: false,
     saveUninitialized: true,
   })
@@ -38,7 +38,7 @@ const io = new Server(server);
 
 app.set("io", io); // da routes mogu pristupiti io
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080; // Render sam zadaje port kroz PORT
 server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}!`);
 })
