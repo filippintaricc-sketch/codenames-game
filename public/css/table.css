@@ -1,0 +1,101 @@
+/* Shared look for every page: the "card table" (green felt with paper on it).
+   Page files (home.css, game.css) only add their own layout on top of this. */
+
+:root{
+    --felt: #161c1a;       /* page background */
+    --felt-2: #1f2725;     /* one step lighter than the felt, for disabled buttons */
+    --paper: #e3e2da;      /* cards, invitation, score sheet */
+    --paper-2: #d3d1c6;    /* a step darker than paper, for unselected options */
+    --ink: #161c1a;        /* text on paper */
+    --muted: #55594f;      /* secondary text on paper */
+    --muted-on-felt: #c8c9c0;
+    --jade: #9fc7b8;       /* the one main action on a page */
+    --blue: #36678f;
+    --red: #a9452f;
+    --neutral: #c2b9a3;
+    --radius: 4px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+
+body{
+    margin: 0;
+    min-height: 100vh;
+    background: var(--felt);
+    color: var(--paper);
+    font: 17px/1.5 'Work Sans', system-ui, sans-serif;
+}
+
+button{ font: inherit; cursor: pointer; }
+
+:focus-visible{
+    outline: 3px solid var(--jade);
+    outline-offset: 2px;
+}
+
+/* Display face: Anton, always uppercase */
+.disp{
+    font-family: Anton, Impact, sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 0.88;
+}
+
+/* Top bar: wordmark on the left, who you are on the right */
+.bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 28px;
+}
+
+.wordmark{ font-size: 28px; }
+
+/* A piece of paper lying on the felt */
+.paper{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: var(--radius);
+}
+
+/* The page's one main action */
+.btn-main{
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--jade);
+    color: var(--ink);
+    font-family: Anton, Impact, sans-serif;
+    text-transform: uppercase;
+    font-size: 30px;
+    padding: 14px 40px;
+    transition: background-color .15s, transform .12s;
+}
+.btn-main:hover:not([disabled]){ background: var(--paper); }
+.btn-main:active:not([disabled]){ transform: scale(.98); }
+.btn-main[disabled]{
+    background: var(--felt-2);
+    color: #8e948d;
+    cursor: not-allowed;
+}
+
+/* Small dark button used on paper */
+.btn-ink{
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 600;
+    padding: 10px 14px;
+    transition: background-color .15s;
+}
+.btn-ink:hover{ background: var(--blue); }
+
+@media (max-width: 700px){
+    .bar{ padding: 14px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+}
