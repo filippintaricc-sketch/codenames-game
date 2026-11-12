@@ -1,57 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codenames</title>
-    <link rel = "stylesheet" href = "/css/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/table.css">
+    <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-    <h1>Dobrodosli u codenames!</h1>
-    <h2>Odaberite tim i ulogu</h2>
-    <hr>
-    <%if (host){%>
-    <form method = "POST" action = "/home/setTimer" class = "timer-form">
-        <span class = "timer-title">⏱ Tajmer</span>
-        <div class = "timer-options">
-            <%[
-                {value: 90, name: "brzo", time: "1:30"},
-                {value: 150, name: "normalno", time: "2:30"},
-                {value: 300, name: "opušteno", time: "5:00"},
-                {value: 0, name: "bez", time: ""}
-            ].forEach(opt=>{%>
-            <label>
-                <input type = "radio" name = "timer" value = "<%=opt.value%>" required <%=timer === opt.value ? "checked" : ""%>>
-                <span><%=opt.name%><%if(opt.time){%> <small><%=opt.time%></small><%}%></span>
-            </label>
-            <%})%>
+    <header class="bar">
+        <span class="wordmark disp">Codenames</span>
+        <span><%= me %><%= host ? " · domaćin" : "" %></span>
+    </header>
+
+    <main class="table">
+        <section class="invite paper">
+            <h1 class="disp">Codenames</h1>
+            <p class="sub">Dvije ekipe, četiri uloge. Odaberite mjesto za stolom; igra kreće kad je svaka uloga zauzeta.</p>
+
+            <div class="seats">
+                <% ["Plavi", "Crveni"].forEach(teamName => { %>
+                <div class="team-<%= teamName %>">
+                    <h2 class="disp"><%= teamName %></h2>
+                    <%# Spymasters first, then operatives %>
+                    <% teams.filter(t => t.team === teamName)
+                            .sort((a, b) => a.type === "špijuni" ? -1 : 1)
+                            .forEach(role => { %>
+                    <div class="seat">
+                        <h3><%= role.type === "špijuni" ? "Špijuni" : "Operativci" %></h3>
+                        <p>
+                            <% if (role.players.length) { %>
+                                <% role.players.forEach((name, i) => { %><%= i ? ", " : "" %><span class="<%= name === me ? "me" : "" %>"><%= name %></span><% }) %>
+                            <% } else { %>
+                                <span class="empty">Prazno mjesto</span>
+                            <% } %>
+                        </p>
+                        <% if (!role.players.includes(me)) { %>
+                        <form method="POST" action="/home/teamEnter">
+                            <input type="hidden" name="team" value="<%= role.id %>">
+                            <button type="submit" class="btn-ink">Sjedni</button>
+                        </form>
+                        <% } %>
+                    </div>
+                    <% }) %>
+                </div>
+                <% }) %>
+            </div>
+        </section>
+
+        <% if (host) { %>
+        <form method="POST" action="/home/setTimer" class="stub paper">
+            <h2 class="disp">Vrijeme za potez</h2>
+            <div class="timer-options">
+                <% [
+                    {value: 90, time: "1:30", name: "brzo"},
+                    {value: 150, time: "2:30", name: "normalno"},
+                    {value: 300, time: "5:00", name: "opušteno"},
+                    {value: 0, time: "bez", name: "bez tajmera"}
+                ].forEach(opt => { %>
+                <label>
+                    <input type="radio" name="timer" value="<%= opt.value %>" required <%= timer === opt.value ? "checked" : "" %>>
+                    <b><%= opt.time %></b><%= opt.name %>
+                </label>
+                <% }) %>
+            </div>
+            <div class="timer-row">
+                <button type="submit" class="btn-ink">Postavi vrijeme</button>
+                <% if (timer === undefined) { %>
+                <p>Vrijeme još nije postavljeno.</p>
+                <% } %>
+            </div>
+        </form>
+
+        <div class="go">
+            <form method="GET" action="/home/startGame">
+                <button type="submit" class="btn-main" <%= missing.length || timer === undefined ? "disabled" : "" %>>Podijeli karte</button>
+            </form>
+            <p>
+                <% if (missing.length) { %>
+                    Još je prazno: <%= missing.join(", ") %>.
+                <% } else if (timer === undefined) { %>
+                    Postavite vrijeme za potez.
+                <% } else { %>
+                    Svi su za stolom.
+                <% } %>
+            </p>
         </div>
-        <button type = "submit" class = "enter-btn timer-btn">Postavi</button>
-        <%if(timer === undefined){%>
-        <p class = "timer-hint">Odaberite tajmer prije početka igre</p>
-        <%}%>
-    </form>
-    <%}%>
-    <div class = "container">
-        
-        <%teams.forEach(elem=>{%>
-        <div class = "kartica">
-                <div class ="teamName <%=elem.team%>"><%=elem.team%> tim <%=elem.type%></div>
-                <ul>
-                <% elem.players.forEach(el=>{%>
-                    <li><%=el%></li>
-                <%})%>
-                </ul>
-                <form method = "POST" action = "/home/teamEnter">
-                    <input type ="hidden" value = "<%=elem.id%>" name = "team">
-                    <button type ="submit" class ="enter-btn">Udi ovdje</button>
-                </form>
+        <% } else { %>
+        <div class="go">
+            <p>Domaćin dijeli karte kad je svaka uloga zauzeta.</p>
         </div>
-        <%})%>
-    </div>
-    <%if (host){%>
-    <button  onclick =  "window.location.href = '/home/startGame'" class = "enter-btn">Zapocni igru!</button>
-    <%}%>
+        <% } %>
+    </main>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>

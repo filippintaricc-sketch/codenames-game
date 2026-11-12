@@ -16,8 +16,13 @@ router.get("/", (req, res) => {
   let host = playerData.host===req.session.player;
   let teams = playerData.teams;
   let timer = game.timer;
+  let me = req.session.player;
+  // Roles with nobody in them, e.g. "crveni operativci". The start button waits until this is empty.
+  let missing = teams
+    .filter(t => !t.players.length)
+    .map(t => `${t.team.toLowerCase()} ${t.type}`);
 
-  res.render("home", { teams, host, timer});
+  res.render("home", { teams, host, timer, me, missing });
 });
 
 router.post("/teamEnter", (req, res) => {
